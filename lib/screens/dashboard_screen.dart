@@ -252,7 +252,6 @@ class _DashboardScreenState extends State<DashboardScreen>
         dataTextStyle: const TextStyle(color: Colors.white),
         columns: const [
           DataColumn(label: Text("الكود")),
-          DataColumn(label: Text("الاسم")),
           DataColumn(label: Text("الحالة")),
           DataColumn(label: Text("المدة")),
           DataColumn(label: Text("الإجراءات")),
@@ -260,7 +259,6 @@ class _DashboardScreenState extends State<DashboardScreen>
         rows: filtered.map<DataRow>((k) {
           return DataRow(cells: [
             DataCell(Text(safe(k["key"]))),
-            DataCell(Text(safe(k["name"]))),
             DataCell(StatusBadge(safe(k["status"]))),
             DataCell(Text(safe(k["remaining"]))),
             DataCell(Row(
@@ -479,7 +477,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 child: TextField(
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
-                                    hintText: "بحث حسب الكود / الاسم / HWID",
+                                    hintText: "بحث حسب الكود",
                                     hintStyle: TextStyle(color: Colors.white54),
                                     border: InputBorder.none,
                                   ),
