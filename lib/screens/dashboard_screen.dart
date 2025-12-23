@@ -253,7 +253,6 @@ class _DashboardScreenState extends State<DashboardScreen>
         columns: const [
           DataColumn(label: Text("الكود")),
           DataColumn(label: Text("الاسم")),
-          DataColumn(label: Text("HWID")),
           DataColumn(label: Text("الحالة")),
           DataColumn(label: Text("المدة")),
           DataColumn(label: Text("الإجراءات")),
@@ -262,7 +261,6 @@ class _DashboardScreenState extends State<DashboardScreen>
           return DataRow(cells: [
             DataCell(Text(safe(k["key"]))),
             DataCell(Text(safe(k["name"]))),
-            DataCell(Text(safe(k["hwid"]))),
             DataCell(StatusBadge(safe(k["status"]))),
             DataCell(Text(safe(k["remaining"]))),
             DataCell(Row(
