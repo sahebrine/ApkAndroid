@@ -3,16 +3,23 @@ workflows:
     name: Android Release
     max_build_duration: 60
     instance_type: mac_mini_m2
+
     environment:
       flutter: stable
       java: 17
+
     scripts:
       - name: Flutter pub get
         script: |
           flutter pub get
 
+      - name: Generate App Icon
+        script: |
+          flutter pub run flutter_launcher_icons
+
       - name: Build APK
         script: |
           flutter build apk --release
+
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
+      - build/app/outputs/flutter-apk/vure-ai.apk
