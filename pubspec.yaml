@@ -18,3 +18,7 @@ flutter:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/logo.png"
