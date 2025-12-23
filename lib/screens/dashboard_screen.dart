@@ -247,100 +247,162 @@ class _DashboardScreenState extends State<DashboardScreen>
   /* ================= TABLE ================= */
 
   Widget tableWidget() {
-    return AnimatedTableContainer(
-      child: DataTable(
-        headingTextStyle: const TextStyle(color: Colors.white),
-        dataTextStyle: const TextStyle(color: Colors.white),
-        columns: const [
-          DataColumn(label: Text("الكود")),
-          DataColumn(label: Text("الحالة")),
-          DataColumn(label: Text("المدة")),
-          DataColumn(label: Text("الإجراءات")),
-        ],
-        rows: filtered.map<DataRow>((k) {
-          return DataRow(cells: [
-            DataCell(Text(safe(k["key"]))),
-            DataCell(StatusBadge(safe(k["status"]))),
-            DataCell(Text(safe(k["remaining"]))),
-            DataCell(Row(
-              children: [
-                AnimatedActionButton(
-                  text: "Reset HWID",
-                  type: ActionType.reset,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => ResetConfirmDialog(
-                        keyValue: k["key"],
-                        onConfirm: () async {
-                          await ApiClient.resetKey(k["key"]);
-                          fetch();
-                          showDialog(
-                            context: context,
-                            builder: (_) => SuccessDialog(
-                              title: "تمت العملية",
-                              message:
-                                  "تم إعادة تعيين HWID للكود:\n${k["key"]}",
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: AnimatedTableContainer(
+          child: DataTable(
+            columnSpacing: 24,
+            headingTextStyle: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+            dataTextStyle: const TextStyle(color: Colors.white),
+            columns: const [
+              DataColumn(label: Text("الكود")),
+              DataColumn(label: Text("الاسم")),
+              DataColumn(label: Text("HWID")),
+              DataColumn(label: Text("الحالة")),
+              DataColumn(label: Text("المدة")),
+              DataColumn(label: Text("الإجراءات")),
+            ],
+            rows: filtered.map<DataRow>((k) {
+              return DataRow(cells: [
+                /// الكود
+                DataCell(
+                  SizedBox(
+                    width: 180,
+                    child: Text(
+                      safe(k["key"]),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 8),
-                AnimatedActionButton(
-                  text: "+ أيام",
-                  type: ActionType.extend,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => ExtendDaysDialog(
-                        keyValue: k["key"],
-                        onConfirm: (days) async {
-                          await ApiClient.extendKey(k["key"], int.parse(days));
-                          fetch();
-                          showDialog(
-                            context: context,
-                            builder: (_) => SuccessDialog(
-                              title: "تمت الإضافة",
-                              message:
-                                  "تم إضافة $days أيام للكود:\n${k["key"]}",
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+
+                /// الاسم
+                DataCell(
+                  SizedBox(
+                    width: 120,
+                    child: Text(
+                      safe(k["name"]),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 8),
-                AnimatedActionButton(
-                  text: "حذف",
-                  type: ActionType.delete,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => DeleteConfirmDialog(
-                        keyValue: k["key"],
-                        onConfirm: () async {
-                          await ApiClient.deleteKey(k["key"]);
-                          fetch();
-                          showDialog(
-                            context: context,
-                            builder: (_) => SuccessDialog(
-                              title: "تم الحذف",
-                              message: "تم حذف الكود:\n${k["key"]}",
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+
+                /// HWID
+                DataCell(
+                  SizedBox(
+                    width: 260,
+                    child: Text(
+                      safe(k["hwid"]),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
-              ],
-            )),
-          ]);
-        }).toList(),
+
+                /// الحالة
+                DataCell(
+                  StatusBadge(safe(k["status"])),
+                ),
+
+                /// المدة
+                DataCell(
+                  SizedBox(
+                    width: 100,
+                    child: Text(safe(k["remaining"])),
+                  ),
+                ),
+
+                /// الإجراءات (محفوظة كما هي)
+                DataCell(
+                  SizedBox(
+                    width: 340,
+                    child: Row(
+                      children: [
+                        AnimatedActionButton(
+                          text: "Reset HWID",
+                          type: ActionType.reset,
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => ResetConfirmDialog(
+                                keyValue: k["key"],
+                                onConfirm: () async {
+                                  await ApiClient.resetKey(k["key"]);
+                                  fetch();
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => SuccessDialog(
+                                      title: "تمت العملية",
+                                      message:
+                                          "تم إعادة تعيين HWID للكود:\n${k["key"]}",
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        AnimatedActionButton(
+                          text: "+ أيام",
+                          type: ActionType.extend,
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => ExtendDaysDialog(
+                                keyValue: k["key"],
+                                onConfirm: (days) async {
+                                  await ApiClient.extendKey(
+                                      k["key"], int.parse(days));
+                                  fetch();
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => SuccessDialog(
+                                      title: "تمت الإضافة",
+                                      message:
+                                          "تم إضافة $days أيام للكود:\n${k["key"]}",
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        AnimatedActionButton(
+                          text: "حذف",
+                          type: ActionType.delete,
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => DeleteConfirmDialog(
+                                keyValue: k["key"],
+                                onConfirm: () async {
+                                  await ApiClient.deleteKey(k["key"]);
+                                  fetch();
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => SuccessDialog(
+                                      title: "تم الحذف",
+                                      message: "تم حذف الكود:\n${k["key"]}",
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ]);
+            }).toList(),
+          ),
+        ),
       ),
     );
   }
@@ -480,7 +542,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 child: TextField(
                                   style: const TextStyle(color: Colors.white),
                                   decoration: const InputDecoration(
-                                    hintText: "بحث حسب الكود",
+                                    hintText: "بحث حسب الكود / الاسم / HWID",
                                     hintStyle: TextStyle(color: Colors.white54),
                                     border: InputBorder.none,
                                   ),
