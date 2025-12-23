@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:vure_dashboard/screens/login_screen.dart';
 import 'package:vure_dashboard/widgets/animated_action_button.dart';
 import 'package:vure_dashboard/widgets/animated_appbar_chip.dart';
 import 'package:vure_dashboard/widgets/animated_filter_chip.dart';
@@ -406,9 +407,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                       ],
                       onTap: () async {
                         await ApiClient.logout();
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          "/login",
-                          (route) => false,
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => LoginScreen(),
+                          ),
                         );
                       },
                     ),
